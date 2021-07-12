@@ -1,0 +1,11 @@
+{
+    "bot_key": "xxxxxxxxxxxxx",
+    "superusers": [
+        123456789
+    ],
+    "admins": [
+        123456789
+    ],
+    "github_repo": "jack-mil/codename-levi",
+    "github_key":""
+}

@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+    bot:
+        container_name: discord_bot
+        image: levi_bot:latest
+        build: ./bot
+        volumes:
+            - ./:/src
+        network_mode: host
+        command: bash -c 'cd /src/bot && python3 bot.py'
+    server_api:
+        container_name: web_server
+        image: display_server:latest
+        build: ./server
+        ports:
+            - "80:5000"
+        volumes:
+            - ./:/src
+        command: bash -c 'cd /src/server && python3 app.py'
