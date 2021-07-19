@@ -6,6 +6,9 @@
     "admins": [
         123456789
     ],
+    "save_dir": "../downloads",
+    "api_root": "http://localhost:80",
+    "api_send_endpnt": "/api/v1/send_image",
     "github_repo": "jack-mil/codename-levi",
     "github_key":""
 }

@@ -17,7 +17,7 @@ import sys
 import traceback
 from datetime import datetime
 from logging import handlers
-from os import listdir, path
+from pathlib import Path
 
 import discord
 from aiohttp import ClientSession, ClientTimeout
@@ -29,8 +29,8 @@ class Levi(Bot):
     def __init__(self, *args, **options):
         super().__init__(*args, **options)
         self.session: ClientSession = None
-        with open('config.json') as conffile:
-            self.config = json.load(conffile)
+        with open("config.json") as conffile:
+            self.config: dict = json.load(conffile)
         self.last_errors = []
 
     async def start(self, *args, **kwargs):
@@ -42,10 +42,10 @@ class Levi(Bot):
         await super().close()
 
     def user_is_admin(self, user):
-        return user.id in self.config['admins']
+        return user.id in self.config["admins"]
 
     def user_is_superuser(self, user: User):
-        return user.id in self.config['superusers']
+        return user.id in self.config["superusers"]
 
     async def log_error(self, error: Exception, error_source: Context = None):
         is_context = isinstance(error_source, Context)
@@ -62,8 +62,8 @@ class Levi(Bot):
 
 
 client = Levi(
-    command_prefix=when_mentioned_or(''),
-    description='Send n00ds',
+    command_prefix=when_mentioned_or(""),
+    description="Send n00ds",
     max_messages=15000,
     intents=discord.Intents(dm_messages=True),
     allowed_mentions=AllowedMentions.none(),
@@ -71,25 +71,26 @@ client = Levi(
 
 STARTUP_EXTENSIONS = []
 
-for file in listdir(path.join(path.dirname(__file__), 'cogs/')):
-    filename, ext = path.splitext(file)
-    if '.py' in ext:
-        STARTUP_EXTENSIONS.append(f'cogs.{filename}')
+# for file in listdir(path.join(path.dirname(__file__), 'cogs/')):
+for file in Path(Path(__file__).parent, "cogs/").iterdir():
+    filename, ext = file.stem, file.suffix
+    if ".py" in ext:
+        STARTUP_EXTENSIONS.append(f"cogs.{filename}")
 
 for extension in reversed(STARTUP_EXTENSIONS):
     try:
-        client.load_extension(f'{extension}')
+        client.load_extension(f"{extension}")
     except Exception as e:
         client.last_errors.append((e, datetime.utcnow(), None, None))
-        exc = f'{type(e).__name__}: {e}'
-        print(f'Failed to load extension {extension}\n{exc}')
+        exc = f"{type(e).__name__}: {e}"
+        print(f"Failed to load extension {extension}\n{exc}")
 
 
 @client.event
 async def on_ready():
-    print('\nActive in these guilds/servers:')
+    print("\nActive in these guilds/servers:")
     [print(g.name) for g in client.guilds]
-    print('\nImage Bot started successfully')
+    print("\nImage Bot started successfully")
     return True
 
 
@@ -104,12 +105,12 @@ async def on_error(event_method, *args, **kwargs):
     Check :func:`~discord.on_error` for more details.
     """
     print(
-        'Default Handler: Ignoring exception in {}'.format(event_method),
+        "Default Handler: Ignoring exception in {}".format(event_method),
         file=sys.stderr,
     )
     traceback.print_exc()
     # --------------- custom code below -------------------------------
-    await client.log_error(sys.exc_info()[1], 'DEFAULT HANDLER:' + event_method)
+    await client.log_error(sys.exc_info()[1], "DEFAULT HANDLER:" + event_method)
 
 
 @client.event
@@ -119,23 +120,23 @@ async def on_message(msg):
 
 
 # Setup logging
-log_filename = '../logs/discord.log'
+log_filename = "../logs/discord.log"
 os.makedirs(os.path.dirname(log_filename), exist_ok=True)
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s:%(levelname)s:%(name)s: %(message)s',
+    format="%(asctime)s:%(levelname)s:%(name)s: %(message)s",
     handlers=[
         logging.StreamHandler(),
         handlers.RotatingFileHandler(
             filename=log_filename,
-            encoding='utf-8',
-            maxBytes=(1048576 * 5),
-            backupCount=7,
+            encoding="utf-8",
+            maxBytes=(1048576),  # 1 MB max
+            backupCount=4,
         ),
     ],
 )
-logging.info('STARTING BOT NOW')
+logging.info("STARTING BOT NOW")
 
 # Start the bot (blocking call)
 client.run()
-print('Image Bot has exited')
+print("Image Bot has exited")
