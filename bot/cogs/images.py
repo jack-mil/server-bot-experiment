@@ -69,7 +69,7 @@ class Images(commands.Cog, name="Image"):
     async def send(self, ctx: Context, *, message: str = None):
         """Send an attached image (and text) to my API"""
         config = self.client.config
-        api_endpoint = config["apt_root"] + config["api_send_endpoint"]
+        api_endpoint = config["api_root"] + config["api_send_endpoint"]
 
         for url in self.get_attachment_urls(ctx):
             body = {"url": url, "text": message}
