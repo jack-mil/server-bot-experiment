@@ -3,7 +3,8 @@ config.json
 logs/*
 !logs/.gitkeep
 */cogs/extra/
-downloads/
+downloaded/*
+!downloaded/.gitkeep
 .env
 
 # Byte-compiled / optimized / DLL files
