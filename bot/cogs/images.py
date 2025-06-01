@@ -9,17 +9,13 @@ Only users which are specified as a superuser in the config.json
 can run commands from this cog.
 """
 
-import os
 import time
 from inspect import Parameter
-from os.path import splitext
 from pathlib import Path, PurePath
-from typing import Generator, Iterable
-from urllib.parse import urlparse
+from typing import Iterable
 
 import aiofiles
 from bot import Levi
-from discord import client
 from discord.channel import DMChannel
 from discord.errors import HTTPException
 from discord.ext import commands

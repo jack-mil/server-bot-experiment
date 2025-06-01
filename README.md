@@ -30,4 +30,8 @@ An exercise in specific learning areas:
    - Some client side Javascript required in the web page hosted by the local server
 
 
-### Thanks to [EM Felix Bot](https://github.come/engineer-man/felix) for foundation of a modular bot structure
+### Attribution
+
+The [EM Felix Bot](https://github.com/engineer-man/felix) served as a great foundation for a modular bot structure.
+Parts of code where copied from there, before being modified and features removed for my experimental purposes.
+Code from that project is used under the MIT License. [Felix License](https://github.com/engineer-man/felix/blob/1c635ed909ce98b1c446f371dffde265351f4021/LICENSE)

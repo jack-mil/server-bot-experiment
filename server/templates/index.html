@@ -3,32 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Flask App</title>
+    <title>Flask Demo</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/sse.js') }}"></script>
 </head>
 
 <body>
-    <script>
-        const evtSource = new EventSource("/stream/listen");
-        evtSource.onmessage = function(event) {
-            console.log(event);
-        }
-        evtSource.addEventListener("new_image", displayEvent);
-        function displayEvent(event) {
-            const li = document.createElement("li");
-            const a = document.createElement("a");
-            const list = document.getElementById("events");
-
-            const dataObj = JSON.parse(event.data);
-            a.href = dataObj.url
-            const text = document.createTextNode(`${dataObj.time} -- ${dataObj.message}`);
-            a.appendChild(text)
-            li.appendChild(a)
-            list.appendChild(li);
-        }
-    </script>
-<ul id="events">
-    <li><a href="http://www.google.com">Some text here lol</a></li>
-</ul>
+    <ul id="events">
+        {% for image in images %}
+            <li><a href="{{ image['url'] }}">{{ image['date'] }}{% if image['message'] %} -- {{ image['message'] }}{% endif %}</a></li>
+        {% endfor %}
+    </ul>
 </body>
 
 </html>
